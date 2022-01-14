@@ -14,7 +14,7 @@ hands = mpHands.Hands(max_num_hands=1, min_detection_confidence=0.7)
 #dessinez les points clés détectés pour la main
 mpDraw = mp.solutions.drawing_utils
 
-#---------------------------------- initialisation de TensorFlow
+#----------------------------------- initialisation de TensorFlow
 
 #Charger le modèle de reconnaissance de geste pré-entraîné par TensorFlow
 model = load_model('mp_hand_gesture')
