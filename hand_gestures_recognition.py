@@ -1,4 +1,3 @@
-
 # importer les packages nécessaires pour le projet
 import cv2
 import numpy as np
@@ -25,18 +24,18 @@ model = load_model('mp_hand_gesture')
 f = open('gestures.names', 'r')
 classNames = f.read().split('\n')  # lire le fichier en utilisant la fonction read().
 f.close()
-#print(classNames)
+print(classNames)
 
 
 # #---------------------------------- Initialisation du caméra the webcam
 cap = cv2.VideoCapture(0)
 
 while True:
-    # Read each frame from the webcam
+    # Lire chaque image de la webcam
     _, frame = cap.read()
     x, y, c = frame.shape
 
-    # Flip the frame vertically
+    # Retournez le cadre verticalement
     frame = cv2.flip(frame, 1)
 
     #Convertir le format des images RGB en format RVB
@@ -48,21 +47,27 @@ while True:
     className = ''
 
 #---------------------------------------------traiter le résultat
+
     #Vérifier si une main est détectée
     if result.multi_hand_landmarks:
         landmarks = []
         #Parcourir chaque détection
-        for handslms in result.multi_hand_landmarks:
-            for lm in handslms.landmark:
+        for handslist in result.multi_hand_landmarks:
+            for lm in handslist.landmark:
                 # print(id, lm)
-                lmx = int(lm.x * x)
+
                 lmy = int(lm.y * y)
+                lmx = int(lm.x * x)
 
                 #Stocker les coordonnées sur une liste
                 landmarks.append([lmx, lmy])
 
             #Dessiner des repères sur des cadres
-            mpDraw.draw_landmarks(frame, handslms, mpHands.HAND_CONNECTIONS)
+            mpDraw.draw_landmarks(frame, handslist, mpHands.HAND_CONNECTIONS)
+
+
+
+# ---------------------------------------------reconaitre geste de main
 
             # Predict gesture
             prediction = model.predict([landmarks])
@@ -71,17 +76,17 @@ while True:
             className = classNames[classID]
 
 
-    # show the prediction on the frame
+    # montrer la prédiction sur le cadre
     cv2.putText(frame, className, (50, 50), cv2.FONT_HERSHEY_DUPLEX,
                    1, (0,0,0), 2 , cv2.LINE_AA)
 
-    # Show the final output
+    # Afficher la sortie finale
     cv2.imshow("Hand gesture", frame)
 
     if cv2.waitKey(1) == ord('q'):
         break
 
-# release the webcam and destroy all active windows
+# relâchez la webcam et détruisez toutes les fenêtres actives
 cap.release()
 
 cv2.destroyAllWindows()
