@@ -5,7 +5,7 @@ import mediapipe as mp
 import tensorflow as tf
 from tensorflow.keras.models import load_model
 
-#----------------------------------initialisation de MediaPipe
+#---------------------------------- initialisation de MediaPipe
 
 #Exécuter l'algorithme de reconnaissance de la main
 mpHands = mp.solutions.hands
